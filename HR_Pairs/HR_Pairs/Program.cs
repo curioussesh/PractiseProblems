@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace HR_Pairs
 {
+    // https://www.hackerrank.com/challenges/pairs
     class Program
     {
 
