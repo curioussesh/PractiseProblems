@@ -13,40 +13,37 @@ namespace HR_Practice
         static string[] inputCmdStrings = {
             "4",
             "4",
-            "1 1 0 0",
+            "0 1 0 0",
             "0 1 1 0",
             "0 0 1 0",
             "1 0 0 0"
         };
 
         static int[,] intArray = null;
-
         static int inputCmdStringsCount = -1;
         static int maxCount = 0;
 
         static string GetCmdLineString()
         {
+            //return Console.ReadLine();
             return inputCmdStrings[++inputCmdStringsCount];
         }
 
-        static void connectedcellmaxcount(int rowInd, int columnInd, int currentCount)
+        static int connectedcellmaxcount(int rowInd, int columnInd, int currentCount)
         {
-            if(rowInd < 0 || rowInd >= intArray.GetLength(0) || columnInd < 0 || columnInd >= intArray.GetLength(1))
+            if(rowInd < 0 || rowInd >= intArray.GetLength(0) || columnInd < 0 || columnInd >= intArray.GetLength(1) || intArray[rowInd, columnInd] <= 0)
             {
-                return;
+                return 0;
             }
-
-            if(intArray[rowInd, columnInd] == 1)
+            else if(intArray[rowInd, columnInd] == 1)
             {
-                intArray[rowInd, columnInd] = ++currentCount;
-                if (intArray[rowInd, columnInd] >= maxCount) { maxCount = intArray[rowInd, columnInd]; }
-                connectedcellmaxcount(rowInd - 1, columnInd, currentCount);
                 connectedcellmaxcount(rowInd + 1, columnInd, currentCount);
-                connectedcellmaxcount(rowInd, columnInd - 1, currentCount);
                 connectedcellmaxcount(rowInd, columnInd + 1, currentCount);
-
+                connectedcellmaxcount(rowInd+1, columnInd + 1, currentCount);
+                currentCount++;
             }
-            return;
+            if (currentCount > maxCount) { maxCount = currentCount; }
+            return currentCount;
             
         }
        
@@ -58,6 +55,7 @@ namespace HR_Practice
             intArray = new int[rows,columns];
             string line = "";
             string[] line_split = null;
+            int tmpValue = 0;
 
             for (int i = 0; i < rows; i++)
             {
@@ -66,10 +64,10 @@ namespace HR_Practice
                 for (int j = 0; j < columns; j++)
                 {
                     intArray[i, j] = Convert.ToInt32(line_split[j]);
+                    connectedcellmaxcount(i, j, 0);
                 }
             }
-
-            connectedcellmaxcount(0, 0, 0);
+           
             Console.WriteLine(maxCount);
             Console.ReadLine();
 
